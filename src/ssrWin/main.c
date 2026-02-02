@@ -679,7 +679,9 @@ static void add_ssr_url_to_sub_list_view(HWND hWnd, const char* ssr_url) {
 
     LoadStringW(hInstance, IDS_APP_NAME, AppName, ARRAYSIZE(AppName));
     LoadStringW(hInstance, IDS_IMPORT_URL, InfoFmt, ARRAYSIZE(InfoFmt));
-    wsprintfW(Info, InfoFmt, succ ? L"successfully" : L"failed");
+    wchar_t StatusMsg[MAX_PATH] = { 0 };
+    LoadStringW(hInstance, succ ? IDS_IMPORT_SUCCESS : IDS_IMPORT_FAILED, StatusMsg, ARRAYSIZE(StatusMsg));
+    wsprintfW(Info, InfoFmt, StatusMsg);
     uType = (succ ? MB_ICONINFORMATION : MB_ICONERROR) | MB_OK;
     MessageBoxW(hWnd, Info, AppName, uType);
 }
@@ -1111,7 +1113,9 @@ BOOL on_delete_item(HWND hWnd) {
         return FALSE;
     }
     LoadStringW(hInstance, IDS_APP_NAME, AppName, ARRAYSIZE(AppName));
-    if (IDOK == MessageBoxW(hWnd, L"Delete the item", AppName, MB_OKCANCEL)) {
+    wchar_t DeleteItem[MAX_PATH] = { 0 };
+    LoadStringW(hInstance, IDS_DELETE_ITEM, DeleteItem, ARRAYSIZE(DeleteItem));
+    if (IDOK == MessageBoxW(hWnd, DeleteItem, AppName, MB_OKCANCEL)) {
         ListView_DeleteItem(wnd_data->hListView, nIndex);
     }
     SetFocus(wnd_data->hListView);
